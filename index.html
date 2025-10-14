@@ -1,179 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="description"
-        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
-  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Clean2Green: A Diffusion-Based Pipeline for Green-Screen Relighting and Composite Correction
-</title>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clean2Green: A Diffusion-Based Pipeline for Green-Screen Relighting and Composite Correction</title>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+<meta name="description" content="A diffusion-based pipeline for green-screen relighting and composite correction." />
+<meta name="keywords" content="Green-screen, diffusion model, relighting, compositing, Clean2Green" />
 
-    gtag('js', new Date());
 
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Clean2Green: A Diffusion-Based Pipeline for Green-Screen Relighting and Composite Correction" />
+<meta property="og:description" content="A diffusion-based pipeline for green-screen relighting and composite correction." />
+<meta property="og:image" content="./static/images/og-cover.jpg" />
+<meta property="og:url" content="https://example.com" />
+<meta name="twitter:card" content="summary_large_image" />
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
 
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
+<link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Noto+Sans:400,700|Castoro:400,700&display=swap" rel="stylesheet" />
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+
+<link rel="stylesheet" href="./static/css/bulma.min.css" />
+<link rel="stylesheet" href="./static/css/bulma-carousel.min.css" />
+<link rel="stylesheet" href="./static/css/bulma-slider.min.css" />
+<link rel="stylesheet" href="./static/css/fontawesome.all.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" />
+<link rel="stylesheet" href="./static/css/index.css" />
+<link rel="icon" href="./static/images/favicon.svg" />
+
+
+<script defer src="./static/js/fontawesome.all.min.js"></script>
+<script defer src="./static/js/bulma-carousel.min.js"></script>
+<script defer src="./static/js/bulma-slider.min.js"></script>
+
+
+<style>
+.publication-title { letter-spacing: .2px; }
+.hero video, .section video { width: 100%; height: auto; border-radius: 12px; }
+.interpolation-image { border-radius: 10px; }
+.icon-link { margin: 0 .5rem; }
+footer .content { font-size: .95rem; }
+</style>
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div class="navbar-menu">
-    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <a class="navbar-item" href="https://keunhong.com">
-      <span class="icon">
-          <i class="fas fa-home"></i>
-      </span>
-      </a>
 
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More Research
-        </a>
-        <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://hypernerf.github.io">
-            HyperNeRF
-          </a>
-          <a class="navbar-item" href="https://nerfies.github.io">
-            Nerfies
-          </a>
-          <a class="navbar-item" href="https://latentfusion.github.io">
-            LatentFusion
-          </a>
-          <a class="navbar-item" href="https://photoshape.github.io">
-            PhotoShape
-          </a>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</nav>
+<section class="hero" id="top">
+<div class="hero-body">
+<div class="container is-max-desktop">
+<div class="columns is-centered">
+<div class="column has-text-centered">
+<h1 class="title is-1 publication-title">Clean2Green: A Diffusion-Based Pipeline for Green-Screen Relighting and Composite Correction</h1>
 
 
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Nerfies: Deformable Neural Radiance Fields</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://keunhong.com">Keunhong Park</a><sup>1</sup>,</span>
-            <span class="author-block">
-              <a href="https://utkarshsinha.com">Utkarsh Sinha</a><sup>2</sup>,</span>
-            <span class="author-block">
-              <a href="https://jonbarron.info">Jonathan T. Barron</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="http://sofienbouaziz.com">Sofien Bouaziz</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://www.danbgoldman.com">Dan B Goldman</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://homes.cs.washington.edu/~seitz/">Steven M. Seitz</a><sup>1,2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="http://www.ricardomartinbrualla.com">Ricardo Martin-Brualla</a><sup>2</sup>
-            </span>
-          </div>
+<div class="is-size-6 publication-authors" aria-label="Authors">
+<span class="author-block"><a href="#">Prince Odion</a><sup>1</sup>,</span>
+<span class="author-block"><a href="#">William A P Smith</a><sup>1</sup>,</span>
+<span class="author-block"><a href="#">James Gardner</a><sup>1</sup>,</span>
+<span class="author-block"><a href="#">Florian Block</a><sup>1</sup></span>
+</div>
+<div class="is-size-6 publication-authors">
+<span class="author-block"><sup>1</sup>University of York</span>
+</div>
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of Washington,</span>
-            <span class="author-block"><sup>2</sup>Google Research</span>
-          </div>
 
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/nerfies"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
-                  </a>
-              </span>
-              <!-- Dataset Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/nerfies/releases/tag/0.1"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="far fa-images"></i>
-                  </span>
-                  <span>Data</span>
-                  </a>
-            </div>
+<div class="column has-text-centered">
+<div class="publication-links" aria-label="Project Links">
+<span class="link-block">
+<a href="#" class="external-link button is-normal is-rounded is-dark" aria-label="Paper (PDF)">
+<span class="icon"><i class="fas fa-file-pdf" aria-hidden="true"></i></span>
+<span>Paper</span>
+</a>
+</span>
+<span class="link-block">
+<a href="#" class="external-link button is-normal is-rounded is-dark" aria-label="arXiv">
+<span class="icon"><i class="ai ai-arxiv" aria-hidden="true"></i></span>
+<span>arXiv</span>
+</a>
+</span>
+<span class="link-block">
+<a href="#video" class="external-link button is-normal is-rounded is-dark" aria-label="Demo video link">
+<span class="icon"><i class="fab fa-youtube" aria-hidden="true"></i></span>
+<span>Video</span>
+</a>
+</span>
+<span class="link-block">
+<a href="#" class="external-link button is-normal is-rounded is-dark" aria-label="Source code">
+<span class="icon"><i class="fab fa-github" aria-hidden="true"></i></span>
+<span>Code</span>
+</a>
+</span>
+<span class="link-block">
+<a href="#" class="external-link button is-normal is-rounded is-dark" aria-label="Dataset">
+<span class="icon"><i class="far fa-images" aria-hidden="true"></i></span>
+<span>Data</span>
+</a>
+</span>
+</div>
+</div>
 
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
+</div>
+</div>
+</div>
+</div>
 </section>
 
 <section class="hero teaser">
