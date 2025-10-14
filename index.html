@@ -4,16 +4,16 @@
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Clean2Green: A Diffusion-Based Pipeline for Green-Screen Relighting and Composite Correction</title>
+<title>Clean2Green: A Diffusion-Based Pipeline for Green-Screen Correction</title>
 
 
-<meta name="description" content="A diffusion-based pipeline for green-screen relighting and composite correction." />
+<meta name="description" content="A diffusion-based pipeline for green-screen correction." />
 <meta name="keywords" content="Green-screen, diffusion model, relighting, compositing, Clean2Green" />
 
 
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Clean2Green: A Diffusion-Based Pipeline for Green-Screen Relighting and Composite Correction" />
-<meta property="og:description" content="A diffusion-based pipeline for green-screen relighting and composite correction." />
+<meta property="og:title" content="Clean2Green: A Diffusion-Based Pipeline for Green-Screen Correction" />
+<meta property="og:description" content="A diffusion-based pipeline for green-screen correction." />
 <meta property="og:image" content="./static/images/og-cover.jpg" />
 <meta property="og:url" content="https://example.com" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -52,7 +52,7 @@ footer .content { font-size: .95rem; }
 <div class="container is-max-desktop">
 <div class="columns is-centered">
 <div class="column has-text-centered">
-<h1 class="title is-1 publication-title">Clean2Green: A Diffusion-Based Pipeline for Green-Screen Relighting and Composite Correction</h1>
+<h1 class="title is-1 publication-title">Clean2Green: A Diffusion-Based Pipeline for Green-Screen Correction</h1>
 
 
 <div class="is-size-6 publication-authors" aria-label="Authors">
@@ -112,70 +112,162 @@ footer .content { font-size: .95rem; }
   <div class="container is-max-desktop">
     <div class="hero-body">
       <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
+        <source src="./static/videos/30rock.mp4"
                 type="video/mp4">
       </video>
       <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
-      </h2>
+        We present a diffusion-based approach that ensures consistent illumination between composited subjects and their target environments, while also producing physically and geometrically coherent shadows.
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container is-max-desktop">
-    <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            We present the first method capable of photorealistically reconstructing a non-rigidly
-            deforming scene using photos/videos captured casually from mobile phones.
+            We present <span class="dnerf">Clean2Green</span>, a pipeline for enhancing the realism of green-screen composites. 
+            Poor-quality composites often exhibit lighting mismatches, missing shadows, and edge artefacts that break visual coherence. 
+            To address this, Clean2Green introduces a dataset generation pipeline that synthesizes paired degraded and clean footage using 
+            neural relighting, matting, segmentation, and background reconstruction—enabling supervised training for composite correction.
           </p>
           <p>
-            Our approach augments neural radiance fields
-            (NeRF) by optimizing an
-            additional continuous volumetric deformation field that warps each observed point into a
-            canonical 5D NeRF.
-            We observe that these NeRF-like deformation fields are prone to local minima, and
-            propose a coarse-to-fine optimization method for coordinate-based models that allows for
-            more robust optimization.
-            By adapting principles from geometry processing and physical simulation to NeRF-like
-            models, we propose an elastic regularization of the deformation field that further
-            improves robustness.
+            Using this dataset, we fine-tune <span class="dnerf">LTX-Video</span>, a transformer-based latent diffusion model, with 
+            Low-Rank Adaptation (LoRA) to restore realistic lighting and shadows. The model produces sharper edges, cleaner details, 
+            and perceptually consistent illumination across diverse examples.
           </p>
           <p>
-            We show that <span class="dnerf">Nerfies</span> can turn casually captured selfie
-            photos/videos into deformable NeRF
-            models that allow for photorealistic renderings of the subject from arbitrary
-            viewpoints, which we dub <i>"nerfies"</i>. We evaluate our method by collecting data
-            using a
-            rig with two mobile phones that take time-synchronized photos, yielding train/validation
-            images of the same pose at different viewpoints. We show that our method faithfully
-            reconstructs non-rigidly deforming scenes and reproduces unseen views with high
-            fidelity.
+            Clean2Green offers both a scalable framework for data generation and an empirical demonstration that diffusion-based video 
+            models can transform flawed composites into visually coherent scenes, advancing automation in professional VFX workflows.
           </p>
         </div>
       </div>
     </div>
-    <!--/ Abstract. -->
-
-    <!-- Paper video. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-    <!--/ Paper video. -->
   </div>
 </section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Clean2Green Pipeline</h2>
+
+        <!-- Clean2Green Pipeline Image -->
+        <figure class="image">
+          <img
+            src="./static/images/pipeline.svg"
+            alt="Clean2Green pipeline: Input (degraded composite) → Segmentation/Matting → Background reconstruction → Relighting → Output (clean composite)"
+            loading="lazy"
+            width="1280" height="720"
+            style="border-radius:12px;"
+          />
+          <figcaption class="has-text-centered is-size-6 mt-2">
+            Clean2Green Pipeline: synthesizes paired degraded–clean footage for supervised training.
+          </figcaption>
+        </figure>
+
+        <!-- Pipeline Description -->
+        <div class="content has-text-justified mt-4">
+          <p>
+            Poor-quality green-screen composites and their corresponding clean ground-truth frames
+            (a natural-looking video) are not naturally available. To address this gap, we introduce
+            the <span class="dnerf">Clean2Green Pipeline</span>, a data generation framework that
+            synthesizes paired examples of degraded and realistic footage suitable for supervised
+            training of diffusion-based video models.
+          </p>
+          <p>
+            The pipeline combines neural relighting, segmentation and matting, background reconstruction,
+            and deliberate degradation steps to simulate common compositing errors such as lighting
+            mismatches and missing shadows.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light" id="comparison">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <h2 class="title is-3 has-text-centered mb-5">Before vs After Results</h2>
+      <div id="comparison-carousel" class="carousel results-carousel">
+
+        <!-- Slide 1 -->
+        <div class="item">
+          <div class="columns is-vcentered">
+            <div class="column is-half">
+              <video autoplay muted loop playsinline controls preload="metadata">
+                <source src="./static/videos/pipeline_results/predator_bad.mp4" type="video/mp4">
+              </video>
+              <p class="has-text-centered is-size-6 mt-2">Before</p>
+            </div>
+            <div class="column is-half">
+              <video autoplay muted loop playsinline controls preload="metadata">
+                <source src="./static/videos/pipeline_results/predator_good.mp4" type="video/mp4">
+              </video>
+              <p class="has-text-centered is-size-6 mt-2">After</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="item">
+          <div class="columns is-vcentered">
+            <div class="column is-half">
+              <video autoplay muted loop playsinline controls preload="metadata">
+                <source src="./static/videos/pipeline_results/boyz_bad.mp4" type="video/mp4">
+              </video>
+              <p class="has-text-centered is-size-6 mt-2">Before</p>
+            </div>
+            <div class="column is-half">
+              <video autoplay muted loop playsinline controls preload="metadata">
+                <source src="./static/videos/pipeline_results/boyz_good.mp4" type="video/mp4">
+              </video>
+              <p class="has-text-centered is-size-6 mt-2">After</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="item">
+          <div class="columns is-vcentered">
+            <div class="column is-half">
+              <video autoplay muted loop playsinline controls preload="metadata">
+                <source src="./static/videos/pipeline_results/joker_bad.mp4" type="video/mp4">
+              </video>
+              <p class="has-text-centered is-size-6 mt-2">Before</p>
+            </div>
+            <div class="column is-half">
+              <video autoplay muted loop playsinline controls preload="metadata">
+                <source src="./static/videos/pipeline_results/joker_good.mp4" type="video/mp4">
+              </video>
+              <p class="has-text-centered is-size-6 mt-2">After</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Carousel Activation -->
+<script defer>
+document.addEventListener('DOMContentLoaded', () => {
+  bulmaCarousel.attach('#results-carousel', {
+    slidesToScroll: 1,
+    slidesToShow: 1,
+    autoplay: false,
+    loop: false,
+    pauseOnHover: true
+    });
+});
+</script>
+
 
 
 <section class="section">
