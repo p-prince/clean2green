@@ -112,6 +112,8 @@ body {
 
 .results-carousel {
   overflow: hidden;
+  max-width: 1400px;       /* Increase overall width (default ~960px) */
+  margin: 0 auto;          /* Keep centered */
 }
 
 .results-carousel .item {
@@ -124,6 +126,10 @@ body {
 
 .results-carousel video {
   margin: 0;
+  width: 100%;             /* Fill column width */
+  height: 450px;           /* Increase height for visibility */
+  object-fit: cover;       /* Prevent distortion */
+  border-radius: 12px;     /* Keep smooth edges */
 }
 
 
