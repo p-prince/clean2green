@@ -56,13 +56,13 @@ footer .content { font-size: .95rem; }
 
 
 <div class="is-size-6 publication-authors" aria-label="Authors">
-<span class="author-block"><a href="#">Prince Odion</a><sup>1</sup>,</span>
-<span class="author-block"><a href="#">William A P Smith</a><sup>1</sup>,</span>
-<span class="author-block"><a href="#">James Gardner</a><sup>1</sup>,</span>
-<span class="author-block"><a href="#">Florian Block</a><sup>1</sup></span>
+<span class="author-block"><a href="#">Prince Odion</a>,</span>
+<span class="author-block"><a href="#">William A. P. Smith</a>,</span>
+<span class="author-block"><a href="#">James Gardner</a>,</span>
+<span class="author-block"><a href="#">Florian Block</a></span>
 </div>
 <div class="is-size-6 publication-authors">
-<span class="author-block"><sup>1</sup>University of York</span>
+<span class="author-block">University of York</span>
 </div>
 
 
@@ -126,7 +126,7 @@ footer .content { font-size: .95rem; }
       </div>
 
       <h2 class="subtitle mt-4">
-        Our diffusion-based model ensures consistent illumination between composited subjects and their target environments, while cleaning edge artifacts and producing physically and geometrically coherent shadows.
+        Our diffusion-based model corrects flawed green-screen composites by ensuring consistent illumination between composited subjects and their target environments, while cleaning edge artifacts and producing physically and geometrically coherent shadows.
       </h2>
     </div>
   </div>
@@ -140,19 +140,20 @@ footer .content { font-size: .95rem; }
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            We present <span class="dnerf">Clean2Green</span>, a pipeline for enhancing the realism of green-screen composites. 
-            Poor-quality composites often exhibit lighting mismatches, missing shadows, and edge artefacts that break visual coherence. 
-            To address this, Clean2Green introduces a dataset generation pipeline that synthesises paired degraded and clean footage using 
-            neural relighting, matting, segmentation, and background reconstruction. This novel generation pipeline enables supervised training for composite correction.
+            We present <span class="dnerf">Clean2Green</span>, a pipeline designed to enhance the realism of green-screen composites. 
+            Low-quality composites often suffer from lighting mismatches, missing shadows, and edge artefacts that disrupt visual coherence. 
+            However, training models to correct these errors is challenging due to the absence of paired data capturing both degraded composites and their 
+            natural, high-quality counterparts because such relationships do not occur naturally in the real-world.
           </p>
           <p>
-            Using this dataset, we fine-tune <span class="dnerf">LTX-Video</span>, a transformer-based latent diffusion model, with 
-            Low-Rank Adaptation (LoRA) to restore realistic lighting and shadows. The model produces sharper edges, cleaner details, 
-            and perceptually consistent illumination across diverse examples.
+            To address this gap, <span class="dnerf">Clean2Green</span> synthesises paired video data of a <em>bad composite</em> 
+            and its corresponding <em>ground-truth</em> (original) footage using neural relighting, matting, segmentation, 
+            and background reconstruction. This enables supervised training for realistic composite correction.
           </p>
           <p>
-            Our approach offers both a scalable framework for data generation and an empirical demonstration that diffusion-based video 
-            models can transform flawed composites into visually coherent scenes, advancing automation in professional VFX workflows.
+            Using this dataset, we fine-tune <span class="dnerf">LTX-Video</span>, a transformer-based latent diffusion model with 
+            Low-Rank Adaptation (LoRA), to restore consistent lighting and shadows. The resulting model produces sharper edges, 
+            cleaner details, and perceptually coherent illumination across diverse examples.
           </p>
         </div>
       </div>
@@ -161,11 +162,12 @@ footer .content { font-size: .95rem; }
 </section>
 
 
+
 <!-- Clean2Green Pipeline -->
 <section id="pipeline" class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
+      <div class="column is-full">
         <h2 class="title is-3">Clean2Green Pipeline</h2>
 
         <!-- Clean2Green Pipeline Image -->
@@ -174,17 +176,29 @@ footer .content { font-size: .95rem; }
             src="./static/images/pipeline.svg"
             alt="Clean2Green pipeline: Input (degraded composite) → Segmentation/Matting → Background reconstruction → Relighting → Output (clean composite)"
             loading="lazy"
-            width="1280" height="720"
+            width="1600" height="900"
             style="border-radius:12px;"
           />
-          <figcaption class="has-text-centered is-size-6 mt-2">
-            Clean2Green Pipeline: creates paired degraded–clean footage for supervised training.
-          </figcaption>
         </figure>
+
+        <!-- Description -->
+        <p class="content has-text-justified mt-5">
+          The Clean2Green pipeline generates paired clean–degraded video data for supervised relighting model training. 
+          It begins with an input video processed through three main modules. In the 
+          Relighting Module, the footage is decomposed into geometry buffers (G-Buffers) and 
+          relit under diverse random environment maps using the DiffusionRenderer, which performs 
+          both inverse and forward rendering to ensure physically consistent illumination. The 
+          Segmentation Module employs SAM2 to obtain actor masks and MatAnyone to refine 
+          foreground mattes, isolating the subject. Meanwhile, the 
+          Background Extraction Module uses Omnimatte to generate an empty background plate. Finally, the relit actor is composited back onto the extracted background 
+          to produce realistic paired clean and degraded frames for training.
+        </p>
       </div>
     </div>
   </div>
 </section>
+
+
 
 <!-- Before/After Results -->
 <section id="results" class="section">
@@ -194,20 +208,39 @@ footer .content { font-size: .95rem; }
         <h2 class="title is-3">Clean2Green Samples</h2>
 
         <div id="results-carousel" class="carousel results-carousel mt-4">
-          <!-- Slide 1 -->
+          
+          <!-- Slide 4 -->
           <div class="item">
             <div class="columns is-vcentered">
               <div class="column">
                 <video autoplay muted loop playsinline controls preload="metadata">
-                  <source src="./static/videos/pipeline_results/predator_good.mp4" type="video/mp4">
+                  <source src="./static/videos/pipeline_results/good_1.mp4" type="video/mp4">
                 </video>
                 <p class="has-text-centered is-size-6 mt-2">Original Video</p>
               </div>
               <div class="column">
                 <video autoplay muted loop playsinline controls preload="metadata">
-                  <source src="./static/videos/pipeline_results/predator_bad.mp4" type="video/mp4">
+                  <source src="./static/videos/pipeline_results/bad_1.mp4" type="video/mp4">
                 </video>
-                <p class="has-text-centered is-size-6 mt-2">Synthetic Degraded Pair</p>
+                <p class="has-text-centered is-size-6 mt-2">Synthetic Degraded Sample</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 1 -->
+          <div class="item">
+            <div class="columns is-vcentered">
+              <div class="column">
+                <video autoplay muted loop playsinline controls preload="metadata">
+                  <source src="./static/videos/pipeline_results/blade_good.mp4" type="video/mp4">
+                </video>
+                <p class="has-text-centered is-size-6 mt-2">Original Video</p>
+              </div>
+              <div class="column">
+                <video autoplay muted loop playsinline controls preload="metadata">
+                  <source src="./static/videos/pipeline_results/blade_bad.mp4" type="video/mp4">
+                </video>
+                <p class="has-text-centered is-size-6 mt-2">Synthetic Degraded Sample</p>
               </div>
             </div>
           </div>
@@ -225,7 +258,7 @@ footer .content { font-size: .95rem; }
                 <video autoplay muted loop playsinline controls preload="metadata">
                   <source src="./static/videos/pipeline_results/boyz_bad.mp4" type="video/mp4">
                 </video>
-                <p class="has-text-centered is-size-6 mt-2">Synthetic Degraded Pair</p>
+                <p class="has-text-centered is-size-6 mt-2">Synthetic Degraded Sample</p>
               </div>
             </div>
           </div>
@@ -243,7 +276,7 @@ footer .content { font-size: .95rem; }
                 <video autoplay muted loop playsinline controls preload="metadata">
                   <source src="./static/videos/pipeline_results/joker_bad.mp4" type="video/mp4">
                 </video>
-                <p class="has-text-centered is-size-6 mt-2">Synthetic Degraded Pair</p>
+                <p class="has-text-centered is-size-6 mt-2">Synthetic Degraded Sample</p>
               </div>
             </div>
           </div>
