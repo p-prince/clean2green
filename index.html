@@ -71,33 +71,33 @@ footer .content { font-size: .95rem; }
 <span class="link-block">
 <a href="#" class="external-link button is-normal is-rounded is-dark" aria-label="Paper (PDF)">
 <span class="icon"><i class="fas fa-file-pdf" aria-hidden="true"></i></span>
-<span>Paper</span>
+<span>Paper (Coming Soon)</span>
 </a>
 </span>
-<span class="link-block">
+<!-- <span class="link-block">
 <a href="#" class="external-link button is-normal is-rounded is-dark" aria-label="arXiv">
 <span class="icon"><i class="ai ai-arxiv" aria-hidden="true"></i></span>
 <span>arXiv</span>
 </a>
-</span>
-<span class="link-block">
+</span> -->
+<!-- <span class="link-block">
 <a href="#video" class="external-link button is-normal is-rounded is-dark" aria-label="Demo video link">
 <span class="icon"><i class="fab fa-youtube" aria-hidden="true"></i></span>
 <span>Video</span>
 </a>
-</span>
+</span> -->
 <span class="link-block">
 <a href="#" class="external-link button is-normal is-rounded is-dark" aria-label="Source code">
 <span class="icon"><i class="fab fa-github" aria-hidden="true"></i></span>
-<span>Code</span>
+<span>Code (Coming Soon)</span>
 </a>
 </span>
-<span class="link-block">
+<!-- <span class="link-block">
 <a href="#" class="external-link button is-normal is-rounded is-dark" aria-label="Dataset">
 <span class="icon"><i class="far fa-images" aria-hidden="true"></i></span>
 <span>Data</span>
 </a>
-</span>
+</span> -->
 </div>
 </div>
 
@@ -140,20 +140,11 @@ footer .content { font-size: .95rem; }
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            We present <span class="dnerf">Clean2Green</span>, a pipeline designed to enhance the realism of green-screen composites. 
-            Low-quality composites often suffer from lighting mismatches, missing shadows, and edge artefacts that disrupt visual coherence. 
-            Training models to correct these errors is challenging due to the absence of paired data capturing both degraded composites and their 
-            natural, high-quality counterparts because such relationships do not occur naturally in the real-world.
+            Greenscreen compositing remains widely used due to its accessibility and cost-effectiveness. However, it suffers from inconsistent lighting between actors and virtual backgrounds. We propose an end-to-end approach that directly transforms badly composited videos into realistic results. Our method consists of two key components: (1) <span class="dnerf">clean2green</span>, a pipeline for generating paired training data by removing actors and their effects from real footage and re-compositing them with inconsistent lighting, and (2) <span class="dnerf">green2clean</span>, a conditional video diffusion model that learns the inverse mapping from bad composites to realistic video.
           </p>
+
           <p>
-            To address this gap, <span class="dnerf">Clean2Green</span> synthesises paired video data of a <em>bad composite</em> 
-            and its corresponding <em>ground-truth</em> (original) footage using neural relighting, matting, segmentation, 
-            and background reconstruction. This enables supervised training for realistic composite correction.
-          </p>
-          <p>
-            Using this dataset, we fine-tune <span class="dnerf">LTX-Video</span>, a transformer-based latent diffusion model with 
-            Low-Rank Adaptation (LoRA), to restore consistent lighting and shadows. The resulting model produces sharper edges, 
-            cleaner details, and perceptually coherent illumination across diverse examples.
+            By fine-tuning existing generative models on our synthetic paired data, we achieve high-quality results while requiring only modest training data. Our approach works directly on composited video, enabling <em>remastering</em> of archive footage where original layers are unavailable. As well as realistically relighting actors (with plausible specular reflections, saturations and self-shadowing) our model also correctly predicts cast shadows of the actor onto the scene. We validate our method on <span class="dnerf">green2clean-500</span>, a new benchmark dataset with ground truth, and demonstrate significant improvements on a benchmark of real-world examples of badly composited video.
           </p>
         </div>
       </div>
@@ -161,6 +152,33 @@ footer .content { font-size: .95rem; }
   </div>
 </section>
 
+<!-- Approach -->
+<section id="method" class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Our Approach</h2>
+
+        <!-- Clean2Green Pipeline Image -->
+        <figure class="image">
+          <img
+            src="./static/images/teaser.png"
+            alt="Clean2Green pipeline: Input (degraded composite) → Segmentation/Matting → Background reconstruction → Relighting → Output (clean composite)"
+            loading="lazy"
+            width="2200" height="1000"
+            style="border-radius:12px;"
+          />
+        </figure>
+
+        
+        <!-- Description -->
+          <p class="content has-text-justified mt-5">
+            We propose a degradation pipeline (clean2green) to transform real videos into versions that appear as if an actor's green-screen performance has been badly composited into the scene. This provides paired training data to fine-tune a generative video model to convert bad composites into realistic video (green2clean). When the trained model is applied to real bad composites, it realistically harmonises the foreground to the background without needing foreground masks, explicit lighting estimation or re-rendering.
+          </p>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 <!-- Clean2Green Pipeline -->
@@ -208,7 +226,7 @@ footer .content { font-size: .95rem; }
         <h2 class="title is-3">Clean2Green Samples</h2>
 
         <div id="results-carousel" class="carousel results-carousel mt-4">
-          
+
           <!-- Slide 4 -->
           <div class="item">
             <div class="columns is-vcentered">
@@ -282,10 +300,20 @@ footer .content { font-size: .95rem; }
           </div>
 
         </div> <!-- /carousel -->
+
+        <!-- Caption under carousel -->
+        <p class="has-text-centered has-text-grey mt-4 is-size-6">
+          <span class="dnerf">Clean2Green</span> removes actor-dependent lighting effects such as shadows and reflections, 
+          then relights the actor under inconsistent illumination to simulate poor compositing conditions. 
+          This process introduces edge artefacts and lighting mismatches that make the actor appear 
+          detached from the environment, creating realistic <em>bad composites</em> for training.
+        </p>
+
       </div>
     </div>
   </div>
 </section>
+
 
 
 <!-- Carousel Activation -->
@@ -300,6 +328,129 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+
+<!-- Green2Clean Intro Section -->
+<section id="green2clean-intro" class="section">
+  <div class="container">
+
+    <!-- Title -->
+    <h2 class="title is-3 has-text-centered">
+      <span class="dnerf">Green2Clean</span>
+    </h2>
+
+    <!-- Intro paragraph (left-aligned normal text) -->
+    <div class="content subtitle mt-5">
+      <p>
+        <span class="dnerf">Green2Clean</span> is a <strong>conditional video diffusion model</strong> that learns the inverse
+        mapping from <em>bad composites</em> to realistic video. Built on top of the
+        <a href="https://github.com/Lightricks/LTX-Video-Trainer/tree/main?tab=readme-ov-file" target="_blank"><strong>LTX</strong></a>
+        architecture, it is fine-tuned using <strong>Low-Rank Adaptation (LoRA)</strong> on paired data produced by
+        <span class="dnerf">Clean2Green</span>. The model restores consistent illumination, reconstructs shadows, and enhances
+        visual coherence across frames to produce temporally stable, photorealistic results.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Green2Clean Reconstructions Section -->
+<section id="green2clean-recon" class="section">
+  <div class="container">
+
+    <!-- Subheading -->
+    <h3 class="title is-4 has-text-centered">Green2Clean Reconstructions</h3>
+    <p class="has-text-centered is-size-6 has-text-grey mb-5" style="max-width: 850px; margin: 0 auto;">
+      Evaluation on synthetically constructed <em>bad composites</em> formed by pairing random foregrounds and backgrounds
+      from <strong>VideoMatte240K</strong> (Washington University). The model harmonises foreground–background illumination and colour,
+      restoring spatial coherence and generating plausible self- and cast-shadows.
+    </p>
+
+    <!-- Carousel -->
+    <div id="g2c-carousel" class="carousel results-carousel mt-4" style="max-width: 900px; margin: 0 auto;">
+
+      <!-- Slide A -->
+      <div class="item">
+        <figure class="image" style="position:relative;border-radius:12px;overflow:hidden;">
+          <video autoplay muted loop playsinline controls preload="metadata"
+            style="display:block;width:100%;height:auto;max-height:420px;object-fit:cover;">
+            <source src="./static/videos/green2clean-washington/step_010000_15.mp4" type="video/mp4">
+          </video>
+          <span class="tag is-dark" style="position:absolute;top:10px;left:10px;">Random Foreground + Background</span>
+          <span class="tag is-dark" style="position:absolute;top:10px;right:10px;">Green2Clean Reconstruction</span>
+        </figure>
+      </div>
+
+      <!-- Slide B -->
+      <div class="item">
+        <figure class="image" style="position:relative;border-radius:12px;overflow:hidden;">
+          <video autoplay muted loop playsinline controls preload="metadata"
+            style="display:block;width:100%;height:auto;max-height:420px;object-fit:cover;">
+            <source src="./static/videos/green2clean-washington/5_large_dataset.mp4" type="video/mp4">
+          </video>
+          <span class="tag is-dark" style="position:absolute;top:10px;left:10px;">Random Foreground + Background</span>
+          <span class="tag is-dark" style="position:absolute;top:10px;right:10px;">Green2Clean Reconstruction</span>
+        </figure>
+      </div>
+
+      <!-- Slide C -->
+      <div class="item">
+        <figure class="image" style="position:relative;border-radius:12px;overflow:hidden;">
+          <video autoplay muted loop playsinline controls preload="metadata"
+            style="display:block;width:100%;height:auto;max-height:420px;object-fit:cover;">
+            <source src="./static/videos/green2clean-washington/step_010000_10.mp4" type="video/mp4">
+          </video>
+          <span class="tag is-dark" style="position:absolute;top:10px;left:10px;">Random Foreground + Background</span>
+          <span class="tag is-dark" style="position:absolute;top:10px;right:10px;">Green2Clean Reconstruction</span>
+        </figure>
+      </div>
+
+      <!-- Slide D -->
+      <div class="item">
+        <figure class="image" style="position:relative;border-radius:12px;overflow:hidden;">
+          <video autoplay muted loop playsinline controls preload="metadata"
+            style="display:block;width:100%;height:auto;max-height:420px;object-fit:cover;">
+            <source src="./static/videos/green2clean-washington/step_010000_9.mp4" type="video/mp4">
+          </video>
+          <span class="tag is-dark" style="position:absolute;top:10px;left:10px;">Random Foreground + Background</span>
+          <span class="tag is-dark" style="position:absolute;top:10px;right:10px;">Green2Clean Reconstruction</span>
+        </figure>
+      </div>
+
+      <!-- Slide E -->
+      <div class="item">
+        <figure class="image" style="position:relative;border-radius:12px;overflow:hidden;">
+          <video autoplay muted loop playsinline controls preload="metadata"
+            style="display:block;width:100%;height:auto;max-height:420px;object-fit:cover;">
+            <source src="./static/videos/green2clean-washington/step_010000_7.mp4" type="video/mp4">
+          </video>
+          <span class="tag is-dark" style="position:absolute;top:10px;left:10px;">Random Foreground + Background</span>
+          <span class="tag is-dark" style="position:absolute;top:10px;right:10px;">Green2Clean Reconstruction</span>
+        </figure>
+      </div>
+
+    </div><!-- /carousel -->
+
+  </div>
+</section>
+
+
+<!-- Optional carousel init (if not already present globally) -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.bulmaCarousel && bulmaCarousel.attach) {
+      bulmaCarousel.attach('#g2c-carousel', {
+        slidesToScroll: 1,
+        slidesToShow: 1,
+        autoplay: false,
+        pauseOnHover: true,
+        infinite: true
+      });
+    }
+  });
+</script>
+
+
 
 <section class="section">
   <div class="container is-max-desktop">
